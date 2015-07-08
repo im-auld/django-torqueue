@@ -1,5 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from streaming import pubnub
+
+Q_NOTICE = '{p.username} on Team: {p.team} has queued on {p.server}'
+UNQ_NOTICE = '{p.username} on Team: {p.team} has left the queue on {p.server}'
 
 
 SERVERS = (
@@ -33,7 +37,27 @@ ADV_CLASSES = (
 )
 
 class Player(User):
-    friends = models.ManyToManyField("self", symmetrical=False)
+    server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
+    adv_class = models.CharField(
+        choices=[(c, c) for c in ADV_CLASSES],
+        max_length=25
+    )
+    team = models.CharField(max_length=50,blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        super(Player, self).save(*args, **kwargs)
+        pubnub.publish(
+            channel='torqueue-notifications',
+            message=Q_NOTICE.format(p=self)
+        )
+
+    def delete(self, *args, **kwargs):
+        super(Player, self).delete(*args, **kwargs)
+        pubnub.publish(
+            channel='torqueue-notifications',
+            message=UNQ_NOTICE.format(p=self)
+        )
+
 
 
 class Character(models.Model):

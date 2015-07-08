@@ -24,9 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6opnmtmy0@t82j(^_l6xvo%0^+wjmzuex@hxe)=6qi!-%dka=x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = []
+DEBUG = True
 
 
 # Application definition
@@ -41,16 +39,37 @@ INSTALLED_APPS = (
     'api',
     'rest_framework',
     'rest_framework_ember',
-    'factory'
+    'factory',
+    'corsheaders'
 )
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'PAGE_SIZE': 10
+    'PAGINATE_BY': 10,
+    'PAGINATE_BY_PARAM': 'page_size',
+    'MAX_PAGINATE_BY': 100,
+    # DRF v3.1+
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework_ember.pagination.PageNumberPagination',
+    # older than DRF v3.1
+    'DEFAULT_PAGINATION_SERIALIZER_CLASS':
+        'rest_framework_ember.pagination.PaginationSerializer',
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_ember.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_ember.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
 }
+
+REST_EMBER_FORMAT_KEYS = True
+REST_EMBER_PLURALIZE_KEYS = True
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -58,6 +77,15 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+        'google.com',
+        '127.0.0.1:4200'
+    )
+CORS_EXPOSE_HEADERS = (
+    'Access-Control-Allow-Origin: *',
 )
 
 ROOT_URLCONF = 'rankedqueue.urls'
@@ -112,7 +140,7 @@ ALLOWED_HOSTS = ['*']
 
 # Static asset configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (

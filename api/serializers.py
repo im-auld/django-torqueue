@@ -5,7 +5,7 @@ from models import Player, Character
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        fields = ('url', 'username', 'email')
+        fields = ('id', 'username', 'server', 'adv_class', 'team')
 
 
 class CharacterSerializer(serializers.ModelSerializer):
