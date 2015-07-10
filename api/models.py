@@ -50,6 +50,10 @@ class Player(User):
             channel='torqueue-notifications',
             message=Q_NOTICE.format(p=self)
         )
+        pubnub.publish(
+            channel=self.server,
+            message='{p.username}'.format(p=self)
+        )
 
     def delete(self, *args, **kwargs):
         super(Player, self).delete(*args, **kwargs)
