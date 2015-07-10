@@ -50,5 +50,5 @@ def disconnect(message):
 # )
 
 pubnub.subscribe(
-    channels='torqueue-notifications', callback=callback, error=callback,
+    channels=channels, callback=callback, error=callback,
 )
