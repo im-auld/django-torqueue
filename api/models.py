@@ -62,15 +62,15 @@ class Player(User):
         )
 
 
-
-class Character(models.Model):
-    player = models.ForeignKey(Player)
-    name = models.CharField(max_length=25)
-    server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
-    adv_class = models.CharField(
-        choices=[(c, c) for c in ADV_CLASSES],
-        max_length=25
-    )
-
-    def __repr__(self):
-        return '{s.name} - {s.server}'.format(s=self)
+# This code will be used at a later date
+# class Character(models.Model):
+#     player = models.ForeignKey(Player)
+#     name = models.CharField(max_length=25)
+#     server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
+#     adv_class = models.CharField(
+#         choices=[(c, c) for c in ADV_CLASSES],
+#         max_length=25
+#     )
+#
+#     def __repr__(self):
+#         return '{s.name} - {s.server}'.format(s=self)
