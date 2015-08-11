@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from streaming import pubnub
+# from streaming import pubnub
 
 Q_NOTICE = '{p.username} on Team: {p.team} has queued on {p.server}'
 UNQ_NOTICE = '{p.username} on Team: {p.team} has left the queue on {p.server}'
@@ -36,8 +36,11 @@ ADV_CLASSES = (
     'Sentinel'
 )
 
+class Server(models.Model):
+    name = models.CharField(max_length=25)
+
 class Player(User):
-    server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
+    server = models.ForeignKey(Server)
     adv_class = models.CharField(
         choices=[(c, c) for c in ADV_CLASSES],
         max_length=25
