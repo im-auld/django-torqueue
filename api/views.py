@@ -1,7 +1,13 @@
+from django.shortcuts import render
 from models import Player, Server
 from rest_framework import viewsets, permissions
 from serializers import PlayerSerializer, ServerSerializer
 
+
+def index(request):
+    queue = {server: [p for p in server] for server in Server.objects.all()}
+    context = {'queue': queue}
+    return render(request, 'api/index.html', context=context)
 
 class PlayerViewSet(viewsets.ModelViewSet):
     """
