@@ -39,6 +39,12 @@ ADV_CLASSES = (
 class Server(models.Model):
     name = models.CharField(max_length=25)
 
+    def __repr__(self):
+        return self.name
+
+    def __iter__(self):
+        yield self.player_set.all()
+
 class Player(User):
     server = models.ForeignKey(Server)
     adv_class = models.CharField(
@@ -60,6 +66,9 @@ class Player(User):
             channel='torqueue-notifications',
             message=UNQ_NOTICE.format(p=self)
         )
+
+    def __repr__(self):
+        return '<{p.username} - {p.team}>'.format(p=self)
 
 
 # This code will be used at a later date
