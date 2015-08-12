@@ -1,6 +1,6 @@
-from models import Player, Character
+from models import Player
 from rest_framework import viewsets, permissions
-from serializers import PlayerSerializer, CharacterSerializer
+from serializers import PlayerSerializer
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -10,7 +10,6 @@ class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
 
-class CharacterViewSet(viewsets.ModelViewSet):
-    queryset = Character.objects.all()
-    serializer_class = CharacterSerializer
-
+# class CharacterViewSet(viewsets.ModelViewSet):
+#     queryset = Character.objects.all()
+#     serializer_class = CharacterSerializer
