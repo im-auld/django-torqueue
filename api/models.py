@@ -39,11 +39,13 @@ ADV_CLASSES = (
 class Server(models.Model):
     name = models.CharField(max_length=25)
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
 
     def __iter__(self):
-        yield self.player_set.all()
+        for player in self.player_set.all():
+            yield player
+
 
 class Player(User):
     server = models.ForeignKey(Server)
@@ -67,7 +69,7 @@ class Player(User):
             message=UNQ_NOTICE.format(p=self)
         )
 
-    def __repr__(self):
+    def __str__(self):
         return '<{p.username} - {p.team}>'.format(p=self)
 
 
