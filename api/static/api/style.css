@@ -1,0 +1,31 @@
+body {
+	padding-top: 70px;
+}
+
+ul {
+	list-style: none;
+}
+
+img {
+	border: 0;
+}
+
+.container a {
+	padding: 10px 0 0 0;
+}
+
+.class-symbol {
+	height: 35px;
+	width: 35px;
+	border: 0;
+}
+
+#chat {
+	height: 500px;
+	overflow-y: scroll;
+	word-wrap: word-break;
+}
+
+.chat-name {
+	font-weight: bold;
+}
