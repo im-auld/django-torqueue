@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from streaming import pubnub
+# from streaming import pubnub
 
 Q_NOTICE = '{p.username} on Team: {p.team} has queued on {p.server}'
 UNQ_NOTICE = '{p.username} on Team: {p.team} has left the queue on {p.server}'
@@ -36,8 +36,19 @@ ADV_CLASSES = (
     'Sentinel'
 )
 
+class Server(models.Model):
+    name = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.name
+
+    def __iter__(self):
+        for player in self.player_set.all():
+            yield player
+
+
 class Player(User):
-    server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
+    server = models.ForeignKey(Server)
     adv_class = models.CharField(
         choices=[(c, c) for c in ADV_CLASSES],
         max_length=25
@@ -62,16 +73,19 @@ class Player(User):
             message=UNQ_NOTICE.format(p=self)
         )
 
+    def __str__(self):
+        return '<{p.username} - {p.team}>'.format(p=self)
 
 
-class Character(models.Model):
-    player = models.ForeignKey(Player)
-    name = models.CharField(max_length=25)
-    server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
-    adv_class = models.CharField(
-        choices=[(c, c) for c in ADV_CLASSES],
-        max_length=25
-    )
-
-    def __repr__(self):
-        return '{s.name} - {s.server}'.format(s=self)
+# This code will be used at a later date
+# class Character(models.Model):
+#     player = models.ForeignKey(Player)
+#     name = models.CharField(max_length=25)
+#     server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
+#     adv_class = models.CharField(
+#         choices=[(c, c) for c in ADV_CLASSES],
+#         max_length=25
+#     )
+#
+#     def __repr__(self):
+#         return '{s.name} - {s.server}'.format(s=self)

@@ -1,0 +1,19 @@
+{% extends 'api/base.html' %}
+{% block main %}
+<div class="row">
+    {% for server, players in queue.items%}
+    <div class="col-md-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {{ server }}
+            </div>
+            <div class="panel-body">
+            {% for player in players %}
+                {{ player.username }}
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock main %}
