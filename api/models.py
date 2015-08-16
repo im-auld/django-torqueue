@@ -71,7 +71,7 @@ class Player(User):
 class Character(models.Model):
     player = models.ForeignKey(Player)
     name = models.CharField(max_length=25)
-    server = models.ForeignKey(Server)
+    server = models.ForeignKey(Server, blank=True, null=True)
     adv_class = models.CharField(
         choices=[(c, c) for c in ADV_CLASSES],
         max_length=25
