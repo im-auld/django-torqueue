@@ -17,3 +17,15 @@
     {% endfor %}
 </div>
 {% endblock main %}
+{% block sidebar %}
+{% if user.is_authenticated %}
+<p>Hello, {{user}}</p>
+<p>Join queue<p>
+{% else %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ login_form }}
+    <button type="submit">Log In</button>
+</form>
+{% endif %}
+{% endblock sidebar %}
