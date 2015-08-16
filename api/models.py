@@ -43,45 +43,39 @@ class Server(models.Model):
         return self.name
 
     def __iter__(self):
-        for player in self.player_set.all():
-            yield player
+        for character in self.character_set.all():
+            yield character
 
 
 class Player(User):
-    server = models.ForeignKey(Server)
-    adv_class = models.CharField(
-        choices=[(c, c) for c in ADV_CLASSES],
-        max_length=25
-    )
-    team = models.CharField(max_length=50,blank=True, null=True)
+    pass
 
     def save(self, *args, **kwargs):
         super(Player, self).save(*args, **kwargs)
-        pubnub.publish(
-            channel='torqueue-notifications',
-            message=Q_NOTICE.format(p=self)
-        )
+        # pubnub.publish(
+        #     channel='torqueue-notifications',
+        #     message=Q_NOTICE.format(p=self)
+        # )
 
     def delete(self, *args, **kwargs):
         super(Player, self).delete(*args, **kwargs)
-        pubnub.publish(
-            channel='torqueue-notifications',
-            message=UNQ_NOTICE.format(p=self)
-        )
+        # pubnub.publish(
+        #     channel='torqueue-notifications',
+        #     message=UNQ_NOTICE.format(p=self)
+        # )
 
     def __str__(self):
         return '<{p.username} - {p.team}>'.format(p=self)
 
 
-# This code will be used at a later date
-# class Character(models.Model):
-#     player = models.ForeignKey(Player)
-#     name = models.CharField(max_length=25)
-#     server = models.CharField(choices=[(c, c) for c in SERVERS], max_length=25)
-#     adv_class = models.CharField(
-#         choices=[(c, c) for c in ADV_CLASSES],
-#         max_length=25
-#     )
-#
-#     def __repr__(self):
-#         return '{s.name} - {s.server}'.format(s=self)
+class Character(models.Model):
+    player = models.ForeignKey(Player)
+    name = models.CharField(max_length=25)
+    server = models.ForeignKey(Server, blank=True, null=True)
+    adv_class = models.CharField(
+        choices=[(c, c) for c in ADV_CLASSES],
+        max_length=25
+    )
+
+    def __str__(self):
+        return '{s.name} - {s.server}'.format(s=self)
