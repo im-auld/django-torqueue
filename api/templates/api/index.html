@@ -1,16 +1,18 @@
 {% extends 'api/base.html' %}
 {% block main %}
 <div class="row">
-    {% for server, players in queue.items%}
+    {% for server, characters in queue.items%}
     <div class="col-md-3">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 {{ server }}
             </div>
             <div class="panel-body">
-            {% for player in players %}
-                {{ player.username }}
-            {% endfor %}
+                <ul>
+                {% for character in characters %}
+                    <li>{{ character.name }}</li>
+                {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
@@ -20,7 +22,15 @@
 {% block sidebar %}
 {% if user.is_authenticated %}
 <p>Hello, {{user}}</p>
+<a href="{% url 'logout' %}">Log out</a>
 <p>Join queue<p>
+<h3>Your Characters</h3>
+{% for character in characters %}
+    <div class="character-card">
+        <p>{{character.name}}</p>
+        <p>{{character.adv_class}}</p>
+    </div>
+{% endfor %}
 {% else %}
 <form action="" method="POST">
     {% csrf_token %}
