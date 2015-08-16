@@ -1,14 +1,15 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
-from serializers import PlayerSerializer, ServerSerializer
-from api.forms import LoginForm
-from api.models import Player, Server
+from serializers import PlayerSerializer, ServerSerializer, CharacterSerializer
+from api.forms import LoginForm, CharacterForm
+from api.models import Player, Server, Character
 
 
 def index(request):
     login_form = LoginForm()
-    queue = {server: [p for p in server] for server in Server.objects.all()}
+    queue = {server: [c for c in server] for server in Server.objects.all()}
+    print(queue)
     context = {
         'queue': queue,
         'login_form': login_form,
@@ -33,6 +34,6 @@ class ServerViewSet(viewsets.ModelViewSet):
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
 
-# class CharacterViewSet(viewsets.ModelViewSet):
-#     queryset = Character.objects.all()
-#     serializer_class = CharacterSerializer
+class CharacterViewSet(viewsets.ModelViewSet):
+    queryset = Character.objects.all()
+    serializer_class = CharacterSerializer
