@@ -1,5 +1,5 @@
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
 from rest_framework import viewsets, permissions
 from serializers import PlayerSerializer, ServerSerializer, CharacterSerializer
 from api.forms import LoginForm, CharacterForm
@@ -8,11 +8,12 @@ from api.models import Player, Server, Character
 
 def index(request):
     login_form = LoginForm()
-    queue = {server: [c for c in server] for server in Server.objects.all()}
-    print(queue)
+    character_form = CharacterForm()
     context = {
-        'queue': queue,
+        'queue': {server: [c for c in server] for server in Server.objects.all()},
         'login_form': login_form,
+        'character_form': character_form,
+        'characters': Character.objects.filter(player=request.user)
     }
     if request.method == 'POST':
         username = request.POST['username']
@@ -20,8 +21,11 @@ def index(request):
         user = authenticate(username=username, password=password)
         if user.is_active:
             login(request, user)
-            context['user'] = user
     return render(request, 'api/index.html', context=context)
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
 
 class PlayerViewSet(viewsets.ModelViewSet):
     """
