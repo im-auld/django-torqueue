@@ -1,13 +1,31 @@
-from django.shortcuts import render
-from models import Player, Server
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
 from rest_framework import viewsets, permissions
-from serializers import PlayerSerializer, ServerSerializer
+from serializers import PlayerSerializer, ServerSerializer, CharacterSerializer
+from api.forms import LoginForm, CharacterForm
+from api.models import Player, Server, Character
 
 
 def index(request):
-    queue = {server: [p for p in server] for server in Server.objects.all()}
-    context = {'queue': queue}
+    login_form = LoginForm()
+    character_form = CharacterForm()
+    context = {
+        'queue': {server: [c for c in server] for server in Server.objects.all()},
+        'login_form': login_form,
+        'character_form': character_form,
+        'characters': Character.objects.filter(player=request.user)
+    }
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user.is_active:
+            login(request, user)
     return render(request, 'api/index.html', context=context)
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
 
 class PlayerViewSet(viewsets.ModelViewSet):
     """
@@ -20,6 +38,6 @@ class ServerViewSet(viewsets.ModelViewSet):
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
 
-# class CharacterViewSet(viewsets.ModelViewSet):
-#     queryset = Character.objects.all()
-#     serializer_class = CharacterSerializer
+class CharacterViewSet(viewsets.ModelViewSet):
+    queryset = Character.objects.all()
+    serializer_class = CharacterSerializer
