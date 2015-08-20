@@ -9,11 +9,12 @@ from api.models import Player, Server, Character
 def index(request):
     login_form = LoginForm()
     character_form = CharacterForm()
+    characters = Character.objects.filter(player=request.user)
     context = {
         'queue': {server: [c for c in server] for server in Server.objects.all()},
         'login_form': login_form,
         'character_form': character_form,
-        'characters': Character.objects.filter(player=request.user)
+        'characters': characters
     }
     if request.method == 'POST':
         username = request.POST['username']

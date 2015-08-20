@@ -57,6 +57,7 @@ class Player(User):
         #     message=Q_NOTICE.format(p=self)
         # )
 
+
     def delete(self, *args, **kwargs):
         super(Player, self).delete(*args, **kwargs)
         # pubnub.publish(
