@@ -1,0 +1,14 @@
+{% extends 'api/base.html' %}
+{% block main %}
+<form method="POST">
+    {% csrf_token %}
+    {%  for field in character_form %}
+      <div class="form-group">
+        {{ field.label_tag }}<br />
+        {{ field }}
+      </div>
+    {% endfor %}
+    <button type="submit">Add</button>
+    <a href="{% url 'index' %}">Cancel</a>
+</form>
+{% endblock main %}

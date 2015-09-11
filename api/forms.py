@@ -1,5 +1,5 @@
 from django import forms
-from api.models import User, Player, Character
+from api.models import User, Character
 
 
 class LoginForm(forms.ModelForm):
@@ -12,4 +12,11 @@ class LoginForm(forms.ModelForm):
 class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
-        fields = ('name', 'server', 'adv_class')
+        fields = ('name', 'adv_class')
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = password = forms.CharField(widget=forms.PasswordInput())
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'confirm_password')

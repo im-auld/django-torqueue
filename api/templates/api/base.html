@@ -2,11 +2,16 @@
 <html>
 <head>
     <meta charset="utf-8">
+    {% if page_title %}
+    <title>{{ page_title }}</title>
+    {% else %}
     <title>TORQueue</title>
+    {% endif %}
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'api/normalize.css'%}">
     <link rel="stylesheet" href="{% static 'api/dashboard.css'%}">
     <link rel="stylesheet" href="{% static 'api/style.css'%}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 </head>
@@ -20,7 +25,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">TORQueue</a>
+          <a class="navbar-brand" href="/">TORQueue</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">

@@ -47,29 +47,8 @@ class Server(models.Model):
             yield character
 
 
-class Player(User):
-    pass
-
-    def save(self, *args, **kwargs):
-        super(Player, self).save(*args, **kwargs)
-        # pubnub.publish(
-        #     channel='torqueue-notifications',
-        #     message=Q_NOTICE.format(p=self)
-        # )
-
-    def delete(self, *args, **kwargs):
-        super(Player, self).delete(*args, **kwargs)
-        # pubnub.publish(
-        #     channel='torqueue-notifications',
-        #     message=UNQ_NOTICE.format(p=self)
-        # )
-
-    def __str__(self):
-        return '<{p.username} - {p.team}>'.format(p=self)
-
-
 class Character(models.Model):
-    player = models.ForeignKey(Player)
+    player = models.ForeignKey(User)
     name = models.CharField(max_length=25)
     server = models.ForeignKey(Server, blank=True, null=True)
     adv_class = models.CharField(

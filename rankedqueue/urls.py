@@ -4,7 +4,7 @@ from rest_framework import routers
 from api import views
 
 router = routers.DefaultRouter()
-router.register(r'players', views.PlayerViewSet)
+router.register(r'players', views.UserViewSet)
 router.register(r'servers', views.ServerViewSet)
 router.register(r'characters', views.CharacterViewSet)
 
@@ -15,5 +15,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^$', views.index, name='index'),
+    url(r'^add-character/$', views.add_character_view, name='add_character_view'),
+    url(r'^signup/$', views.signup_view, name='signup_view'),
     url(r'^logout/$', views.logout_view, name='logout'),
 ]
