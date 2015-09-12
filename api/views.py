@@ -53,7 +53,7 @@ def signup_view(request):
             password = user.cleaned_data.get('password', None)
             username = user.cleaned_data.get('username', None)
             User.objects.create_user(username=username, password=password)
-            logged_in = authenticate(username=username,password=password)
+            logged_in = authenticate(username=username, password=password)
             login(request, logged_in)
             return redirect(reverse('index'))
         else:
@@ -78,7 +78,7 @@ def dequeue_character_view(request, character_id):
 
 
 def logout_view(request):
-    for character in request.user.character_se t.all():
+    for character in request.user.character_set.all():
         character.is_queued = False
         character.save()
     logout(request)
