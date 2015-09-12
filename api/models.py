@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-# from streaming import pubnub
+
 
 Q_NOTICE = '{p.username} on Team: {p.team} has queued on {p.server}'
 UNQ_NOTICE = '{p.username} on Team: {p.team} has left the queue on {p.server}'
@@ -44,39 +44,20 @@ class Server(models.Model):
 
     def __iter__(self):
         for character in self.character_set.all():
+            if character.is_queued:
+                yield character
             yield character
 
 
-class Player(User):
-    pass
-
-    def save(self, *args, **kwargs):
-        super(Player, self).save(*args, **kwargs)
-        # pubnub.publish(
-        #     channel='torqueue-notifications',
-        #     message=Q_NOTICE.format(p=self)
-        # )
-
-
-    def delete(self, *args, **kwargs):
-        super(Player, self).delete(*args, **kwargs)
-        # pubnub.publish(
-        #     channel='torqueue-notifications',
-        #     message=UNQ_NOTICE.format(p=self)
-        # )
-
-    def __str__(self):
-        return '<{p.username} - {p.team}>'.format(p=self)
-
-
 class Character(models.Model):
-    player = models.ForeignKey(Player)
+    player = models.ForeignKey(User)
     name = models.CharField(max_length=25)
     server = models.ForeignKey(Server, blank=True, null=True)
     adv_class = models.CharField(
         choices=[(c, c) for c in ADV_CLASSES],
         max_length=25
     )
+    is_queued = models.BooleanField(default=False)
 
     def __str__(self):
         return '{s.name} - {s.server}'.format(s=self)

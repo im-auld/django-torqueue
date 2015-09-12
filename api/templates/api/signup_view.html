@@ -1,0 +1,45 @@
+{% extends 'api/base.html' %}
+{%  block main %}
+    {%  if errors %}
+        {%  for field, error in errors.items %}
+        <div class="alert alert-danger">{{ field }}: {{ error }}</div>
+        {% endfor %}
+    {%  endif %}
+    <form method="POST">
+    {% csrf_token %}
+    {%  for field in user_form %}
+      <div class="form-group">
+        {{ field.label_tag }}<br />
+        {{ field }}
+      </div>
+    {% endfor %}
+      <div id="match-alert" style="display:none" class="alert alert-danger">Passwords must match</div>
+    <div id="length-alert" style="display:none" class="alert alert-danger">Passwords must be between 8 and 16 characters</div>
+      <button id="submit" type="submit" class="btn btn-default" disabled>Submit</button>
+      <a href="{% url 'index' %}">Cancel</a>
+    </form>
+    <script>
+        $("#id_password").keyup(function(){
+            var password = $("#id_password").val();
+            if(password.length >= 8 && password.length <= 16){
+                $("#length-alert").css('display', 'none');
+            }
+            else {
+                $("#length-alert").css('display', 'inherit');
+                $("#submit").prop("disabled", true);
+            }
+        });
+        $("#id_confirm_password").keyup(function(){
+            var password = $("#id_password").val();
+            var confirm = $("#id_confirm_password").val();
+            if(password === confirm){
+                $("#match-alert").css('display', 'none');
+                $("#submit").prop("disabled", false);
+            }
+            else {
+                $("#match-alert").css('display', 'inherit');
+                $("#submit").prop("disabled", true);
+            }
+        });
+    </script>
+{% endblock main %}

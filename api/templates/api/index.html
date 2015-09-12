@@ -1,7 +1,7 @@
 {% extends 'api/base.html' %}
 {% block main %}
 <div class="row">
-    {% for server, characters in queue.items%}
+    {% for server, chars in queue.items%}
     <div class="col-md-3">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -9,8 +9,8 @@
             </div>
             <div class="panel-body">
                 <ul>
-                {% for character in characters %}
-                    <li>{{ character.name }}</li>
+                {% for char in chars %}
+                    <li>{{ char.name }}</li>
                 {% endfor %}
                 </ul>
             </div>
@@ -22,13 +22,23 @@
 {% block sidebar %}
 {% if user.is_authenticated %}
 <p>Hello, {{user}}</p>
-<a href="{% url 'logout' %}">Log out</a>
-<p>Join queue<p>
+    <ul>
+        <li><a href="{% url 'add_character_view' %}">Add Character</a></li>
+        <li><a href="{% url 'logout' %}">Log out</a></li>
+    </ul>
 <h3>Your Characters</h3>
 {% for character in characters %}
     <div class="character-card">
         <p>{{character.name}}</p>
         <p>{{character.adv_class}}</p>
+        <p>{{character.server}}</p>
+        {% if character.is_queued %}
+            <a href="{% url 'dequeue_character_view' character.id %}" class="btn btn-sm btn-danger">Leave Queue</a>
+        {% elif queued_character and not character.is_queued %}
+            <a class="btn btn-sm btn-primary" title="Take your other character out of the queue to queue another character" disabled>Queue</a>
+        {% else %}
+            <a href="{% url 'queue_character_view' character.id %}" class="btn btn-sm btn-primary">Queue</a>
+        {% endif %}
     </div>
 {% endfor %}
 {% else %}
@@ -36,6 +46,7 @@
     {% csrf_token %}
     {{ login_form }}
     <button type="submit">Log In</button>
+    <a href="{% url 'signup_view' %}">Sign Up</a>
 </form>
 {% endif %}
 {% endblock sidebar %}
