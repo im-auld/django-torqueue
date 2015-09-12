@@ -78,7 +78,7 @@ def dequeue_character_view(request, character_id):
 
 
 def logout_view(request):
-    for character in request.user.character_set.all():
+    for character in request.user.character_se t.all():
         character.is_queued = False
         character.save()
     logout(request)

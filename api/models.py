@@ -46,6 +46,7 @@ class Server(models.Model):
         for character in self.character_set.all():
             if character.is_queued:
                 yield character
+            yield character
 
 
 class Character(models.Model):
