@@ -24,9 +24,13 @@ def index(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        if user.is_active:
+        if user and user.is_active:
             login(request, user)
+        else:
+            return redirect(reverse('index'))
     context['characters'] = get_characters(user)
+    context['queued_character'] = Character.objects.filter(is_queued=True).filter(player=user.pk)
+    print(context['queued_character'])
     return render(request, 'api/index.html', context=context)
 
 
@@ -57,7 +61,26 @@ def signup_view(request):
     return render(request, 'api/signup_view.html', context=context)
 
 
+def queue_character_view(request, character_id):
+    character = Character.objects.get(pk=character_id)
+    if character in request.user.character_set.all():
+        character.is_queued = True
+        character.save()
+    return redirect(reverse('index'))
+
+
+def dequeue_character_view(request, character_id):
+    character = Character.objects.get(pk=character_id)
+    if character in request.user.character_set.all():
+        character.is_queued = False
+        character.save()
+    return redirect(reverse('index'))
+
+
 def logout_view(request):
+    for character in request.user.character_set.all():
+        character.is_queued = False
+        character.save()
     logout(request)
     return redirect('index')
 

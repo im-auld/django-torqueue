@@ -17,5 +17,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^add-character/$', views.add_character_view, name='add_character_view'),
     url(r'^signup/$', views.signup_view, name='signup_view'),
+    url(r'^queue/(?P<character_id>[0-9])$', views.queue_character_view, name='queue_character_view'),
+    url(r'^dequeue/(?P<character_id>[0-9])$', views.dequeue_character_view, name='dequeue_character_view'),
     url(r'^logout/$', views.logout_view, name='logout'),
 ]

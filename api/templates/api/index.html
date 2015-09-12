@@ -31,10 +31,14 @@
     <div class="character-card">
         <p>{{character.name}}</p>
         <p>{{character.adv_class}}</p>
-        <select>
-            <option>SERVERS</option>
-        </select>
-        <a class="btn btn-sm btn-primary">Queue</a>
+        <p>{{character.server}}</p>
+        {% if character.is_queued %}
+            <a href="{% url 'dequeue_character_view' character.id %}" class="btn btn-sm btn-danger">Leave Queue</a>
+        {% elif queued_character and not character.is_queued %}
+            <a class="btn btn-sm btn-primary" title="Take your other character out of the queue to queue another character" disabled>Queue</a>
+        {% else %}
+            <a href="{% url 'queue_character_view' character.id %}" class="btn btn-sm btn-primary">Queue</a>
+        {% endif %}
     </div>
 {% endfor %}
 {% else %}

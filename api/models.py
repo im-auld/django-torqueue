@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-# from streaming import pubnub
+
 
 Q_NOTICE = '{p.username} on Team: {p.team} has queued on {p.server}'
 UNQ_NOTICE = '{p.username} on Team: {p.team} has left the queue on {p.server}'
@@ -44,7 +44,8 @@ class Server(models.Model):
 
     def __iter__(self):
         for character in self.character_set.all():
-            yield character
+            if character.is_queued:
+                yield character
 
 
 class Character(models.Model):
@@ -55,6 +56,7 @@ class Character(models.Model):
         choices=[(c, c) for c in ADV_CLASSES],
         max_length=25
     )
+    is_queued = models.BooleanField(default=False)
 
     def __str__(self):
         return '{s.name} - {s.server}'.format(s=self)
