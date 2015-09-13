@@ -17,6 +17,7 @@ class TestAddCharacterView(CharacterFixtureMixin, TestCase):
         self.assertTrue(logged_in)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.client.logout()
 
     def test_create_character_logged_in(self):
         logged_in = self.client.login(username=self.user.username, password='password')
@@ -29,6 +30,7 @@ class TestAddCharacterView(CharacterFixtureMixin, TestCase):
         response = self.client.post(self.url, data=data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('index'))
+        self.client.logout()
 
     def test_create_character_no_login(self):
         data = {
