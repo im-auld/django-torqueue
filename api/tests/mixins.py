@@ -18,3 +18,12 @@ class CharacterFixtureMixin(UserFixtureMixin):
         self.character = CharacterFactory()
         self.server = ServerFactory()
         self.server.save()
+
+
+class QueueCharacterFixtureMixin(UserFixtureMixin):
+    def setUp(self):
+        super(QueueCharacterFixtureMixin, self).setUp()
+        self.server = ServerFactory()
+        self.server.save()
+        self.character = CharacterFactory(player=self.user, server=self.server)
+        self.character.save()
