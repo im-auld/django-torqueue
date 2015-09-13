@@ -7,6 +7,11 @@ class UserFixtureMixin(object):
         self.user.save()
 
 
+class NewUserFixtureMixin(object):
+    def setUp(self):
+        self.user = UserFactory()
+
+
 class CharacterFixtureMixin(UserFixtureMixin):
     def setUp(self):
         super(CharacterFixtureMixin, self).setUp()
