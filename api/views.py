@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from rest_framework import viewsets
@@ -30,10 +31,10 @@ def index(request):
             return redirect(reverse('index'))
     context['characters'] = get_characters(user)
     context['queued_character'] = Character.objects.filter(is_queued=True).filter(player=user.pk)
-    print(context['queued_character'])
     return render(request, 'api/index.html', context=context)
 
 
+@login_required
 def add_character_view(request):
     character_form = CharacterForm()
     if request.method == 'POST':
@@ -61,6 +62,7 @@ def signup_view(request):
     return render(request, 'api/signup_view.html', context=context)
 
 
+@login_required
 def queue_character_view(request, character_id):
     character = Character.objects.get(pk=character_id)
     if character in request.user.character_set.all():
@@ -69,6 +71,7 @@ def queue_character_view(request, character_id):
     return redirect(reverse('index'))
 
 
+@login_required
 def dequeue_character_view(request, character_id):
     character = Character.objects.get(pk=character_id)
     if character in request.user.character_set.all():
@@ -77,6 +80,7 @@ def dequeue_character_view(request, character_id):
     return redirect(reverse('index'))
 
 
+@login_required
 def logout_view(request):
     for character in request.user.character_set.all():
         character.is_queued = False
