@@ -41,7 +41,11 @@ def add_character_view(request):
         character.player = request.user
         character.save()
         return redirect(reverse('index'))
-    return render(request, 'api/character_form_view.html', {'character_form': character_form})
+    return render(
+        request,
+        'api/character_form_view.html',
+        {'character_form': character_form}
+    )
 
 
 def signup_view(request):
@@ -53,7 +57,7 @@ def signup_view(request):
             password = user.cleaned_data.get('password', None)
             username = user.cleaned_data.get('username', None)
             User.objects.create_user(username=username, password=password)
-            logged_in = authenticate(username=username,password=password)
+            logged_in = authenticate(username=username, password=password)
             login(request, logged_in)
             return redirect(reverse('index'))
         else:

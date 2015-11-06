@@ -13,6 +13,7 @@ class ServerSerializer(serializers.ModelSerializer):
         model = Server
         fields = ('id', 'name', 'character_set')
 
+
 class CharacterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Character

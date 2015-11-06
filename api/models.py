@@ -36,6 +36,7 @@ ADV_CLASSES = (
     'Sentinel'
 )
 
+
 class Server(models.Model):
     name = models.CharField(max_length=25)
 
