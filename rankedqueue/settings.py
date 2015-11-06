@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_ember',
     'factory',
-    'corsheaders'
 )
 
 REST_FRAMEWORK = {
@@ -148,3 +147,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+LOGIN_URL = '/'
