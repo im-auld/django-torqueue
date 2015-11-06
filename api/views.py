@@ -42,7 +42,11 @@ def add_character_view(request):
         character.player = request.user
         character.save()
         return redirect(reverse('index'))
-    return render(request, 'api/character_form_view.html', {'character_form': character_form})
+    return render(
+        request,
+        'api/character_form_view.html',
+        {'character_form': character_form}
+    )
 
 
 def signup_view(request):

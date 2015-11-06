@@ -9,14 +9,17 @@ class LoginForm(forms.ModelForm):
         model = User
         fields = ('username', 'password')
 
+
 class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
         fields = ('name', 'adv_class', 'server')
 
+
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     confirm_password = password = forms.CharField(widget=forms.PasswordInput())
+
     class Meta:
         model = User
         fields = ('username', 'password', 'confirm_password')
